@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.simulatest.examples</groupId>
+		<artifactId>simulatest-examples</artifactId>
+		<version>0.1.0</version>
+	</parent>
+
+	<artifactId>junit6-cdi-ticketing</artifactId>
+	<name>Simulatest Demo - Jakarta CDI Ticketing (JUnit 6)</name>
+	<description>
+		Conference-ticketing domain with Jakarta CDI. A ticket purchase fires a
+		synchronous CDI event; an @Observes listener decrements inventory and
+		logs the movement. All four writes ride the same savepoint, so the
+		next test sees an untouched ledger.
+	</description>
+
+	<properties>
+		<cdi-api.version>4.1.0</cdi-api.version>
+		<weld.version>5.1.3.Final</weld.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-insistencelayer</artifactId>
+		</dependency>
+
+		<!-- Jakarta CDI plugin: auto-discovered via ServiceLoader -->
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-di-jee</artifactId>
+			<version>${simulatest.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.enterprise</groupId>
+			<artifactId>jakarta.enterprise.cdi-api</artifactId>
+			<version>${cdi-api.version}</version>
+		</dependency>
+		<!-- Weld SE: the CDI container used when no Jakarta EE server is present.
+		     Scope is runtime: compile only against the spec API. -->
+		<dependency>
+			<groupId>org.jboss.weld.se</groupId>
+			<artifactId>weld-se-core</artifactId>
+			<version>${weld.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- Simulatest JUnit Platform TestEngine (test scope) -->
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-junit-platform</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JUnit 6 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

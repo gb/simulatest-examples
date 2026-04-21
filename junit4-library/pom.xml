@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.simulatest.examples</groupId>
+		<artifactId>simulatest-examples</artifactId>
+		<version>0.1.0</version>
+	</parent>
+
+	<artifactId>junit4-library</artifactId>
+	<name>Simulatest Demo - Library (JUnit 4, Java)</name>
+	<description>
+		Same library-domain demo as junit6-library, ported to JUnit 4 via the
+		EnvironmentJUnitRunner. Proof that legacy JUnit 4 codebases can adopt
+		Simulatest without migrating to JUnit 6.
+	</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-insistencelayer</artifactId>
+		</dependency>
+
+		<!-- Simulatest JUnit 4 runner (test scope) -->
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-junit4</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JUnit 4 (test scope) -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

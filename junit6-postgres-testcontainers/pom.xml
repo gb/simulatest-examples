@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.simulatest.examples</groupId>
+		<artifactId>simulatest-examples</artifactId>
+		<version>0.1.0</version>
+	</parent>
+
+	<artifactId>junit6-postgres-testcontainers</artifactId>
+	<name>Simulatest Demo - PostgreSQL via Testcontainers (JUnit 6)</name>
+	<description>
+		The library domain running on real PostgreSQL 16 via Testcontainers.
+		Proves the Insistence Layer's savepoint stack survives on a production-grade
+		engine with strict FK enforcement and real transactional semantics.
+	</description>
+
+	<properties>
+		<!-- A real Docker daemon is required to run this demo. CI workflows that
+		     don't provide one should exclude it with `-pl !junit6-postgres-testcontainers`. -->
+		<testcontainers.version>1.21.3</testcontainers.version>
+		<postgresql.version>42.7.7</postgresql.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-insistencelayer</artifactId>
+		</dependency>
+
+		<!-- Simulatest JUnit Platform TestEngine (test scope) -->
+		<dependency>
+			<groupId>org.simulatest</groupId>
+			<artifactId>simulatest-environment-junit-platform</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JUnit 6 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- PostgreSQL + Testcontainers (test scope only) -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
