@@ -3,6 +3,7 @@ package org.simulatest.example.library;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.List;
 import org.simulatest.insistencelayer.InsistenceLayerFactory;
@@ -94,7 +95,24 @@ public final class LibraryDatabase {
 	}
 
 	public static void execute(String sql) {
-		withStatement("Failed to execute statement", stmt -> stmt.execute(sql));
+		// Unlike H2, PostgreSQL aborts the whole transaction on any SQL error
+		// ("current transaction is aborted, commands ignored until end of
+		// transaction block"). A nested savepoint around each mutation lets us
+		// roll back just the failed statement, keeping the outer Insistence
+		// Layer savepoint usable for follow-up assertions.
+		try (Connection conn = getConnection();
+			 Statement stmt = conn.createStatement()) {
+			Savepoint statementSavepoint = conn.setSavepoint();
+			try {
+				stmt.execute(sql);
+				conn.releaseSavepoint(statementSavepoint);
+			} catch (SQLException e) {
+				conn.rollback(statementSavepoint);
+				throw new LibraryDatabaseException("Failed to execute statement", e);
+			}
+		} catch (SQLException e) {
+			throw new LibraryDatabaseException("Failed to execute statement", e);
+		}
 	}
 
 	public static int queryInt(String sql) {

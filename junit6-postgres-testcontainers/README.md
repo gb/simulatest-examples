@@ -13,7 +13,7 @@ H2 is generous about a lot of things PostgreSQL enforces strictly: transaction i
 ## What it shows
 
 - **Savepoints on real Postgres.** Every `increaseLevel()` maps to a `SAVEPOINT`, every `decreaseLevel()` to a `ROLLBACK TO SAVEPOINT`. The library's 100+ assertions ride entirely on that being correct.
-- **FK-constraint survival.** Postgres aborts the current statement on constraint violation without ending the transaction. The Insistence Layer relies on this behavior; the `deletingBranchWithCopiesFails`-style tests prove it holds.
+- **FK-constraint survival.** Unlike H2, Postgres aborts the whole transaction on any SQL error ("current transaction is aborted, commands ignored"). `LibraryDatabase.execute` pushes a nested savepoint per statement so a constraint violation only rolls back that one statement, not the enclosing Insistence Layer savepoint. The `deletingBranchWithCopiesFails`-style tests prove the outer savepoint survives.
 - **Delete-and-reinsert with the same PK.** Postgres enforces PK uniqueness at statement level; the savepoint restores the original row at rollback. Tricky on any DB, nailed here.
 - **Testcontainers wiring.** `LibraryPlugin` spins up a container with `withReuse(true)` so local runs after the first are near-instant. Schema is created once, before any savepoint.
 
