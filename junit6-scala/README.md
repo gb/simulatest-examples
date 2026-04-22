@@ -8,16 +8,16 @@ Scala 3.5 · ScalikeJDBC 4.3 · JUnit 6 · H2.
 
 ## What it shows
 
-- **Scala environments.** `CategoriesEnvironment` and `ProductsEnvironment` are plain Scala classes implementing `org.simulatest.environment.Environment`. The `@EnvironmentParent(classOf[CategoriesEnvironment])` annotation works exactly as in Java.
+- **Scala environments.** `OpenCatalogEnvironment` and `StockedCatalogEnvironment` are plain Scala classes implementing `org.simulatest.environment.Environment`. The `@EnvironmentParent(classOf[OpenCatalogEnvironment])` annotation works exactly as in Java.
 - **ScalikeJDBC through the savepoint stack.** `ConnectionPool.add(DEFAULT_NAME, DataSourceConnectionPool(wrapped))` points ScalikeJDBC at the Insistence-Layer-wrapped DataSource. Every `sql"..."` call rides the shared connection.
 - **Jupiter from Scala.** Tests use `org.junit.jupiter.api.Test` and `Assertions.assertEquals`. Nothing Scala-specific in the test framework layer.
 - **Same isolation guarantees as the Java demos.** `updateProductPrice` then `priceIsBackToOriginal`; `deleteAllElectronics` then `electronicsAreBack`. Sibling tests never see each other's mutations.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-CategoriesEnvironment     3 categories (Books, Electronics, Homeware)
-  └── ProductsEnvironment 7 products spread across them
+OpenCatalogEnvironment         catalog structure: 3 categories, no products
+  └── StockedCatalogEnvironment shelves stocked: 7 products across categories
 ```
 
 ## Run
@@ -44,7 +44,7 @@ This is a sharp edge; the same category of issue can bite any Scala library that
 |---|---|
 | [`CatalogDb.scala`](src/main/scala/org/simulatest/example/catalog/CatalogDb.scala) | ScalikeJDBC wrappers. See the class comment for why `DB.autoCommit` is used. |
 | [`CatalogPlugin.scala`](src/test/scala/org/simulatest/example/catalog/CatalogPlugin.scala) | Bootstraps H2, wraps via the Insistence Layer, registers the wrapped DataSource with ScalikeJDBC's connection pool. |
-| [`ProductsEnvironment.scala`](src/main/scala/org/simulatest/example/catalog/environment/ProductsEnvironment.scala) | The parent-annotation in Scala syntax. |
+| [`StockedCatalogEnvironment.scala`](src/main/scala/org/simulatest/example/catalog/environment/StockedCatalogEnvironment.scala) | The parent-annotation in Scala syntax. |
 | [`ProductsTest.scala`](src/test/scala/org/simulatest/example/catalog/ProductsTest.scala) | Classic Simulatest isolation story told in Scala. |
 
 ## Scala-specific notes

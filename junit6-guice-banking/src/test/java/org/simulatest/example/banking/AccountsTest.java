@@ -4,17 +4,17 @@ import com.google.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.simulatest.di.guice.SimulatestGuiceConfig;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.banking.environment.AccountsEnvironment;
+import org.simulatest.example.banking.environment.FundedBankEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * Baseline assertions at the leaf environment: six seeded accounts, $6,000
- * total, an empty audit log. These anchor the invariants that the transfer
- * tests shake.
+ * Baseline assertions at the <b>funded bank</b> world-state: six seeded
+ * accounts, $6,000 total, an empty audit log. These anchor the invariants
+ * that the transfer tests shake.
  */
 @SimulatestGuiceConfig(BankingModule.class)
-@UseEnvironment(AccountsEnvironment.class)
+@UseEnvironment(FundedBankEnvironment.class)
 class AccountsTest {
 
 	@Inject AccountRepository accounts;

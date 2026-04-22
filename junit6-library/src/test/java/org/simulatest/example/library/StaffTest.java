@@ -2,22 +2,23 @@ package org.simulatest.example.library;
 
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.library.environment.StaffEnvironment;
+import org.simulatest.example.library.environment.StaffedLibraryEnvironment;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests at LEVEL 3b — staff only. Sibling of CatalogEnvironment:
- * books, members, and loans are invisible (rolled back automatically).
+ * Tests at the <b>staffed library</b> world-state — staff on duty but no
+ * books, members, or loans (those live in the sibling stocked subtree,
+ * which has already been rolled back).
  *
  * <p>This test class serves a DUAL purpose:
  * <ol>
  *   <li>Staff CRUD and isolation at this level</li>
- *   <li>PROOF that sibling subtree isolation works — when CatalogEnvironment's
- *       entire subtree (books, copies, members, loans, holds) was rolled
- *       back before StaffEnvironment ran, all those tables must be empty here</li>
+ *   <li>PROOF that sibling subtree isolation works — when the stocked
+ *       subtree (books, copies, members, loans, holds) was rolled back
+ *       before this state runs, all those tables must be empty here</li>
  * </ol>
  */
-@UseEnvironment(StaffEnvironment.class)
+@UseEnvironment(StaffedLibraryEnvironment.class)
 class StaffTest {
 
 	// =========================================================================
@@ -127,14 +128,14 @@ class StaffTest {
 	// =========================================================================
 	// SIBLING ISOLATION — THE CROWN JEWEL.
 	//
-	// CatalogEnvironment and its entire subtree (books, copies, members,
-	// loans, holds) ran BEFORE StaffEnvironment. The Insistence Layer
-	// rolled ALL of it back. If ANY data from that subtree is visible here,
+	// The stocked-library subtree (books, copies, members, loans, holds)
+	// ran BEFORE this staffed-library state. The Insistence Layer rolled
+	// ALL of it back. If ANY data from that subtree is visible here,
 	// sibling isolation is broken and the entire tree model is untrustworthy.
 	// =========================================================================
 
 	@Test
-	void noBooksExist_siblingCatalogWasRolledBack() {
+	void noBooksExist_stockedSiblingWasRolledBack() {
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM book"));
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM book_copy"));
 	}

@@ -7,12 +7,18 @@ import org.simulatest.environment.annotation.EnvironmentParent;
 import org.simulatest.example.ticketing.TicketTierRepository;
 
 /**
- * Each of the 3 conferences gets STANDARD (100 seats) and VIP (20 seats) tiers.
- * Six tiers total: IDs 1..6 in conference order.
+ * World-state: <b>tickets are on sale</b>.
+ *
+ * <p>Every scheduled conference has a full price sheet published: STANDARD
+ * (100 seats) and VIP (20 seats) tiers for each of the 3 conferences, 6
+ * tiers total. Doors are effectively open — {@code PurchaseService} can
+ * start selling the moment a test enters this state.
+ *
+ * <p>Parent: {@link ScheduledConferencesEnvironment}. Leaf of the tree.
  */
 @Dependent
-@EnvironmentParent(ConferencesEnvironment.class)
-public class TicketTiersEnvironment implements Environment {
+@EnvironmentParent(ScheduledConferencesEnvironment.class)
+public class OnSaleEnvironment implements Environment {
 
 	@Inject TicketTierRepository tiers;
 

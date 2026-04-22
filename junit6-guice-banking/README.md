@@ -8,18 +8,23 @@ Java 17 · JUnit 6 · Guice 7 · H2 · raw JDBC.
 
 ## What it shows
 
-- **Guice DI inside environments and tests.** `AccountsEnvironment` takes an `AccountRepository` by constructor injection; tests inject `TransferService`, `AccountRepository`, and `AuditLog`. Nothing exotic, just standard Guice.
+- **Guice DI inside environments and tests.** `FundedBankEnvironment` takes a `BankingDatabase` and an `AccountRepository` by constructor injection; tests inject `TransferService`, `AccountRepository`, and `AuditLog`. Nothing exotic, just standard Guice.
 - **The audit-log invariant.** Every transfer writes a matched pair of audit rows: a negative entry on the source and a positive entry on the destination. The sum of `audit_log.amount_cents` over all rows is always zero. No triggers, no stored procedures; the guarantee is the `TransferService` code plus the savepoint wrap.
 - **Rollback covers side effects.** `TransferTest.manyTransfersKeepTheLedgerFlat` posts three transfers and writes six audit rows; `allBalancesAreBackToAThousand` and `auditLogIsEmptyAgainBetweenTests` run afterward and see the baseline. That's the demo's shiny moment.
 - **Order-independent plugin wiring.** `BankingPlugin` configures the Insistence Layer up front; `BankingModule` binds nothing related to the `DataSource`. Services reach the wrapped connection via `BankingDatabase`, which means `SimulatestGuicePlugin` and `BankingPlugin` can load in either order without fighting.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-CurrencyEnvironment                    USD, EUR, BRL
-  └── CustomersEnvironment             Alice, Bob, Carol
-        └── AccountsEnvironment        each customer: CHECKING + SAVINGS @ $1000
+OperatingBankEnvironment           bank open: USD/EUR/BRL configured, no customers yet
+  └── FundedBankEnvironment        open for business: 3 customers × 2 accounts × $1000 each
 ```
+
+Only two levels, because there are only two useful bank states for this
+domain. A customer without an account isn't a meaningful world-state — the
+system only interacts with customers through their accounts. So
+`FundedBankEnvironment` does the whole thing in one step: onboard the
+customers, open their accounts, seed the balances.
 
 ## Run
 

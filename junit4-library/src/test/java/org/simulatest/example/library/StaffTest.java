@@ -4,24 +4,24 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.environment.junit.EnvironmentJUnitRunner;
-import org.simulatest.example.library.environment.StaffEnvironment;
+import org.simulatest.example.library.environment.StaffedLibraryEnvironment;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests at LEVEL 3b — staff only. Sibling of CatalogEnvironment:
- * books, members, and loans are invisible (rolled back automatically).
+ * Tests at the <b>staffed library</b> world-state — staff on duty but no
+ * books, members, or loans.
  *
  * <p>Dual purpose:
  * <ol>
  *   <li>Staff CRUD and isolation at this level.</li>
- *   <li>PROOF of sibling subtree isolation — when CatalogEnvironment's entire
- *       subtree ran first, then got rolled back before StaffEnvironment ran,
- *       none of its tables (book, book_copy, member, loan, hold) may leak here.</li>
+ *   <li>PROOF of sibling subtree isolation — the stocked subtree (books,
+ *       copies, members, loans, holds) ran first and was rolled back before
+ *       this state runs. None of its tables may leak here.</li>
  * </ol>
  */
 @RunWith(EnvironmentJUnitRunner.class)
-@UseEnvironment(StaffEnvironment.class)
+@UseEnvironment(StaffedLibraryEnvironment.class)
 public class StaffTest {
 
 	@Test
@@ -101,13 +101,13 @@ public class StaffTest {
 	}
 
 	// =========================================================================
-	// Sibling isolation — the crown jewel. CatalogEnvironment and its entire
-	// subtree (book, book_copy, member, loan, hold) ran before StaffEnvironment,
-	// then were rolled back. If any row leaks, isolation is broken.
+	// Sibling isolation — the crown jewel. The stocked-library subtree
+	// (book, book_copy, member, loan, hold) ran before the staffed state,
+	// then was rolled back. If any row leaks, isolation is broken.
 	// =========================================================================
 
 	@Test
-	public void noBooksExist_siblingCatalogWasRolledBack() {
+	public void noBooksExist_stockedSiblingWasRolledBack() {
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM book"));
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM book_copy"));
 	}

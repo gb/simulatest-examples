@@ -5,14 +5,21 @@ import org.simulatest.environment.Environment;
 import org.simulatest.example.library.LibraryDatabase;
 
 /**
- * Level 3a — Book Catalog and Physical Copies.
+ * World-state: <b>books are on the shelves</b>.
  *
- * <p>Parent: {@link BranchesEnvironment}.
- * Sibling: {@link StaffEnvironment} — its data is invisible here and vice versa,
- * because the Insistence Layer rolls back each sibling subtree automatically.
+ * <p>The catalog is populated (10 titles across all 5 genres) and 18
+ * physical copies are distributed across the three branches. A visitor
+ * walking in would see a browsable library — but nobody has been hired
+ * to help them, and nobody has signed up for a card yet.
+ *
+ * <p>Parent: {@link OpenLibraryEnvironment}.
+ * Sibling: {@link StaffedLibraryEnvironment} — these two are independent
+ * next-states of the open library. The Insistence Layer rolls back each
+ * sibling subtree automatically, so data from one is never visible to the
+ * other.
  */
-@EnvironmentParent(BranchesEnvironment.class)
-public final class CatalogEnvironment implements Environment {
+@EnvironmentParent(OpenLibraryEnvironment.class)
+public final class StockedLibraryEnvironment implements Environment {
 
 	@Override
 	public void run() {

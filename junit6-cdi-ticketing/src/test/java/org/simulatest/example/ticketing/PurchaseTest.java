@@ -4,19 +4,20 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.ticketing.environment.TicketTiersEnvironment;
+import org.simulatest.example.ticketing.environment.OnSaleEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
- * The showpiece test: a purchase fires a CDI event, the observer decrements
- * inventory AND writes an inventory-log row. Tests below verify the chain,
- * then the two isolation tests at the bottom prove the savepoint covers both
- * the primary write and the observer's side effects.
+ * The showpiece test, run at the <b>on sale</b> world-state: a purchase
+ * fires a CDI event, the observer decrements inventory AND writes an
+ * inventory-log row. Tests below verify the chain, then the two isolation
+ * tests at the bottom prove the savepoint covers both the primary write
+ * and the observer's side effects.
  */
 @Dependent
-@UseEnvironment(TicketTiersEnvironment.class)
+@UseEnvironment(OnSaleEnvironment.class)
 class PurchaseTest {
 
 	private static final int STANDARD_JAVAONE = 1; // 100 seats, $200

@@ -8,7 +8,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.simulatest.environment.EnvironmentFactory;
 import org.simulatest.environment.EnvironmentReflectionFactory;
 import org.simulatest.environment.EnvironmentRunner;
-import org.simulatest.example.seeding.environment.EmployeeEnvironment;
+import org.simulatest.example.seeding.environment.StaffedOrganizationsEnvironment;
 import org.simulatest.insistencelayer.InsistenceLayer;
 import org.simulatest.insistencelayer.InsistenceLayerFactory;
 
@@ -54,7 +54,7 @@ public final class Main {
 		DevSchema.create(ds);
 
 		DevDatabase.use(ds);
-		EnvironmentRunner.runEnvironment(EmployeeEnvironment.class, factory());
+		EnvironmentRunner.runEnvironment(StaffedOrganizationsEnvironment.class, factory());
 
 		report("SEEDED", ds);
 		System.out.println();
@@ -73,7 +73,7 @@ public final class Main {
 		// Run the seed phase on the RAW datasource so the base data persists,
 		// just like a normal dev-seed run.
 		DevDatabase.use(ds);
-		EnvironmentRunner.runEnvironment(EmployeeEnvironment.class, factory());
+		EnvironmentRunner.runEnvironment(StaffedOrganizationsEnvironment.class, factory());
 
 		report("BASELINE (persistent)", ds);
 

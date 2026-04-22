@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.simulatest.di.guice.SimulatestGuiceConfig;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.banking.environment.AccountsEnvironment;
+import org.simulatest.example.banking.environment.FundedBankEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * transfers. Siblings to this class never observe a non-zero net.
  */
 @SimulatestGuiceConfig(BankingModule.class)
-@UseEnvironment(AccountsEnvironment.class)
+@UseEnvironment(FundedBankEnvironment.class)
 class TransferTest {
 
-	// Account IDs seeded by AccountsEnvironment.
+	// Account IDs seeded by FundedBankEnvironment.
 	private static final int ALICE_CHECKING = 1;
 	private static final int ALICE_SAVINGS  = 2;
 	private static final int BOB_CHECKING   = 3;
@@ -83,7 +83,7 @@ class TransferTest {
 	}
 
 	// =========================================================================
-	// Isolation crown jewels. Each of these MUST see the AccountsEnvironment
+	// Isolation crown jewels. Each of these MUST see the funded-bank
 	// baseline — untouched balances, empty audit log — even though the tests
 	// above moved money and appended audit rows.
 	// =========================================================================

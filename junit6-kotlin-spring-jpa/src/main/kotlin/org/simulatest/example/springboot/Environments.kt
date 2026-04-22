@@ -5,10 +5,13 @@ import org.simulatest.environment.annotation.EnvironmentParent
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
- * Environment tree:
+ * World-state: **a fresh task list on day one** — 10 tasks on the board,
+ * nothing marked done yet. The quiet moment before any work has started.
  *
- *   TaskListEnvironment        ◄── 10 fresh tasks, none done
- *     └── TaskListDayTwoEnvironment  ◄── 5 tasks marked done
+ * Environment tree read as a sequence of world-states:
+ *
+ *   TaskListEnvironment              ◄── ROOT: fresh backlog, 10 tasks pending
+ *     └── TaskListDayTwoEnvironment          partial progress: 5 done, 5 pending
  */
 class TaskListEnvironment : Environment {
 
@@ -30,6 +33,12 @@ class TaskListEnvironment : Environment {
 	}
 }
 
+/**
+ * World-state: **the task list two days in** — five items checked off, five
+ * still pending. Demonstrates JPA state inheritance: this environment mutates
+ * rows its parent created, and the Insistence Layer still rolls the
+ * mutations back cleanly between tests.
+ */
 @EnvironmentParent(TaskListEnvironment::class)
 class TaskListDayTwoEnvironment : Environment {
 

@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.environment.junit.EnvironmentJUnitRunner;
-import org.simulatest.example.library.environment.MembersEnvironment;
+import org.simulatest.example.library.environment.LendingLibraryEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,10 +12,11 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests at LEVEL 4 — full catalog + 8 members. Loans don't exist yet.
+ * Tests at the <b>lending library</b> world-state — full catalog plus
+ * 8 enrolled members, poised to lend but no loans issued yet.
  */
 @RunWith(EnvironmentJUnitRunner.class)
-@UseEnvironment(MembersEnvironment.class)
+@UseEnvironment(LendingLibraryEnvironment.class)
 public class MemberTest {
 
 	@Test

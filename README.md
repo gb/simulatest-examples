@@ -15,7 +15,7 @@ Each folder is a self-contained project with its own `README.md` explaining what
 ### Core basics
 | Demo | Stack | What it shows |
 |---|---|---|
-| [`junit6-library`](junit6-library) | Java, JUnit 6, H2, raw JDBC | The environment tree, sibling isolation, per-test savepoint reset, and the JUnit Platform TestEngine. The starting point. |
+| [`junit6-library`](junit6-library) | Java, JUnit 6, H2, raw JDBC | The environment tree, sibling isolation, per-test savepoint reset, and the JUnit Platform TestEngine. The starting point. Also the cleanest illustration of environments as **world-states** (`StockedLibraryEnvironment`, `ActiveCirculationEnvironment`) rather than one-per-table. |
 | [`junit4-library`](junit4-library) | Java, JUnit 4, H2 | Same library domain as `junit6-library`, ported to JUnit 4. Proof that legacy codebases can adopt Simulatest without migrating off JUnit 4. |
 
 ### Framework integrations

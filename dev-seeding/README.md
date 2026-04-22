@@ -14,7 +14,7 @@ The README at the top of the repo promises three use cases for the Insistence La
 
 ### `main seed`
 
-Runs `CompanyEnvironment` → `DepartmentEnvironment` → `EmployeeEnvironment` against a raw H2 file datasource. No Insistence Layer. Every INSERT commits; the file survives the JVM exit. Point your local app at `jdbc:h2:file:./target/dev-seed` (user `sa`, no password) and you have realistic data to develop against.
+Runs `IncorporatedCompaniesEnvironment` → `OrganizedCompaniesEnvironment` → `StaffedOrganizationsEnvironment` against a raw H2 file datasource. No Insistence Layer. Every INSERT commits; the file survives the JVM exit. Point your local app at `jdbc:h2:file:./target/dev-seed` (user `sa`, no password) and you have realistic data to develop against.
 
 ### `main whatif`
 
@@ -22,13 +22,17 @@ First seeds normally. Then switches to the Insistence-Layer-wrapped datasource, 
 
 This is the "prod safety net" story from the README, boiled down: wrap a risky operation in a level, inspect, decide, commit or roll back. In this demo the rollback is hard-coded; in real life it's a human's call.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-CompanyEnvironment              2 companies
-  └── DepartmentEnvironment     4 departments
-        └── EmployeeEnvironment 10 employees
+IncorporatedCompaniesEnvironment          2 companies registered, nothing else
+  └── OrganizedCompaniesEnvironment       org chart: 4 departments
+        └── StaffedOrganizationsEnvironment   fully staffed: 10 employees in roles
 ```
+
+Each node is a state the dev environment would reasonably be in: legal
+entities exist, an org chart is drawn, then people fill it. Names describe
+the state of the world, not the table whose rows got inserted.
 
 ## Run
 
@@ -47,7 +51,7 @@ mvn -pl dev-seeding exec:java -Dexec.mainClass=org.simulatest.example.seeding.Ma
 |---|---|
 | [`Main.java`](src/main/java/org/simulatest/example/seeding/Main.java) | Both modes in one file. The `whatIf` method is the prod-safety-net pattern. |
 | [`DevDatabase.java`](src/main/java/org/simulatest/example/seeding/DevDatabase.java) | A `DataSource` holder. Environments don't know which mode is active. |
-| [`EmployeeEnvironment.java`](src/main/java/org/simulatest/example/seeding/environment/EmployeeEnvironment.java) | The same shape of Environment you'd write for tests, reused here. |
+| [`StaffedOrganizationsEnvironment.java`](src/main/java/org/simulatest/example/seeding/environment/StaffedOrganizationsEnvironment.java) | The same shape of Environment you'd write for tests, reused here. |
 | [`MainSmokeTest.java`](src/test/java/org/simulatest/example/seeding/MainSmokeTest.java) | Verifies both modes in CI. Doubles as a readable usage example. |
 
 ## What real projects should lift from here

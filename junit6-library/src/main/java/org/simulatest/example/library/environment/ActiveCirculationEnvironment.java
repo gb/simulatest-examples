@@ -5,15 +5,21 @@ import org.simulatest.environment.Environment;
 import org.simulatest.example.library.LibraryDatabase;
 
 /**
- * Level 5 — Active Loans and Holds (leaf).
+ * World-state: <b>books are in circulation</b>.
  *
- * <p>Parent: {@link MembersEnvironment}. Inherits the full ancestor chain:
- * genres, member types, branches, books, copies, and members.
- * This is the richest level — a fully operational library with checkouts,
- * an overdue loan, and active holds.
+ * <p>Five loans are active — one of them overdue — and two holds are
+ * queued against popular titles. This is the operational mid-afternoon:
+ * members have borrowed, at least one forgot to bring a book back, and
+ * the waiting list is building. Every other level above this one becomes
+ * observable through its effects: checkouts flipped copy status, holds
+ * reference both members and books.
+ *
+ * <p>Parent: {@link LendingLibraryEnvironment}. Inherits the full chain:
+ * genres and member tiers, branches, books and copies, members. The leaf
+ * of the tree — and the richest world-state the demo provides.
  */
-@EnvironmentParent(MembersEnvironment.class)
-public final class LoansEnvironment implements Environment {
+@EnvironmentParent(LendingLibraryEnvironment.class)
+public final class ActiveCirculationEnvironment implements Environment {
 
 	@Override
 	public void run() {

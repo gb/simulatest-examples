@@ -2,20 +2,21 @@ package org.simulatest.example.library;
 
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.library.environment.LoansEnvironment;
+import org.simulatest.example.library.environment.ActiveCirculationEnvironment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests at LEVEL 5 (leaf) — everything exists: 5 active loans, 2 holds,
- * the full library.
+ * Tests at the <b>active circulation</b> world-state (leaf) — the richest
+ * state in the tree. 5 active loans (one overdue), 2 holds queued, the
+ * full library operational.
  *
- * <p>This is the deepest and richest level. It exercises the most complex
- * scenarios: multi-table workflows, cross-table FK constraints, and overdue
- * detection. Every test mutates state aggressively, and the isolation checks
- * verify that NONE of it leaks to peers.
+ * <p>This is the deepest level. It exercises the most complex scenarios:
+ * multi-table workflows, cross-table FK constraints, and overdue detection.
+ * Every test mutates state aggressively, and the isolation checks verify
+ * that NONE of it leaks to peers.
  */
-@UseEnvironment(LoansEnvironment.class)
+@UseEnvironment(ActiveCirculationEnvironment.class)
 class LoanTest {
 
 	// =========================================================================

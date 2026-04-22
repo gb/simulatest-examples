@@ -24,16 +24,19 @@ src/test/java/.../*Test.java        @RunWith(EnvironmentJUnitRunner.class)
 
 Everything under `src/main` — `LibraryDatabase`, the schema, the six environments — is **byte-for-byte identical** to the JUnit 6 demo. Run both demos and diff the `src/main` trees; they match. That's the point.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-ReferenceDataEnvironment       genres, member types
-  └── BranchesEnvironment      3 branches
-        ├── CatalogEnvironment    books + book copies
-        │     └── MembersEnvironment   members
-        │           └── LoansEnvironment   active loans
-        └── StaffEnvironment      staff per branch
+ReferenceDataEnvironment          chartered: genres & tiers defined, nothing physical yet
+  └── OpenLibraryEnvironment      doors open: 3 branches exist at real addresses
+        ├── StockedLibraryEnvironment     shelves full: 10 books, 18 copies across branches
+        │     └── LendingLibraryEnvironment    ready to lend: 8 members enrolled, no loans yet
+        │           └── ActiveCirculationEnvironment    5 loans out (1 overdue), 2 holds queued
+        └── StaffedLibraryEnvironment     staffed building: 7 employees on duty, no stock
 ```
+
+Names describe the state of the world at each level, not the table whose rows
+got inserted. See [`junit6-library`](../junit6-library) for the full narrative.
 
 ## Run
 

@@ -4,8 +4,16 @@ import org.simulatest.environment.Environment
 import org.simulatest.environment.annotation.EnvironmentParent
 import org.simulatest.example.catalog.CatalogDb
 
-@EnvironmentParent(classOf[CategoriesEnvironment])
-class ProductsEnvironment extends Environment:
+/** World-state: '''the catalog is stocked and browsable'''.
+ *
+ *  Seven products populate the three categories at realistic spreads — three
+ *  books, two electronics, two homeware items. Enough variety that a search,
+ *  filter, or cart test sees something meaningful, not a single demo row.
+ *
+ *  Parent: [[OpenCatalogEnvironment]].
+ */
+@EnvironmentParent(classOf[OpenCatalogEnvironment])
+class StockedCatalogEnvironment extends Environment:
 
 	override def run(): Unit =
 		// Books

@@ -5,15 +5,23 @@ import org.simulatest.environment.Environment;
 import org.simulatest.example.library.LibraryDatabase;
 
 /**
- * Level 3b — Library Staff.
+ * World-state: <b>the library has been staffed</b>.
  *
- * <p>Parent: {@link BranchesEnvironment}.
- * Sibling: {@link CatalogEnvironment} — by the time this environment runs,
- * the entire Catalog subtree (books, members, loans) has been rolled back.
- * See {@code StaffTest} for assertions that prove this sibling isolation.
+ * <p>Seven employees — head librarians, librarians, and assistants —
+ * are on duty across the three branches. Crucially, no books exist in
+ * this state and no members are enrolled; it's a staffed <em>building</em>,
+ * not an operating library. This captures a real moment in a library's
+ * life: the week before opening day, when the team is training but the
+ * collection hasn't been delivered.
+ *
+ * <p>Parent: {@link OpenLibraryEnvironment}.
+ * Sibling: {@link StockedLibraryEnvironment}. By the time this environment
+ * runs, the entire stocked subtree (books, copies, members, loans) has
+ * already been rolled back — see {@code StaffTest} for assertions that
+ * exercise that sibling-subtree isolation directly.
  */
-@EnvironmentParent(BranchesEnvironment.class)
-public final class StaffEnvironment implements Environment {
+@EnvironmentParent(OpenLibraryEnvironment.class)
+public final class StaffedLibraryEnvironment implements Environment {
 
 	@Override
 	public void run() {

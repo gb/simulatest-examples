@@ -4,8 +4,18 @@ import org.simulatest.environment.Environment;
 import org.simulatest.environment.annotation.EnvironmentParent;
 import org.simulatest.example.seeding.DevDatabase;
 
-@EnvironmentParent(CompanyEnvironment.class)
-public final class DepartmentEnvironment implements Environment {
+/**
+ * World-state: <b>companies have an organizational structure</b>.
+ *
+ * <p>Each company's org chart is drawn: Nimbus Cloud has Platform and Sales
+ * departments; Harbor Logistics has Operations and Finance. Four departments
+ * total, wired to their owning companies by FK — but no one has been hired
+ * into any of them yet.
+ *
+ * <p>Parent: {@link IncorporatedCompaniesEnvironment}.
+ */
+@EnvironmentParent(IncorporatedCompaniesEnvironment.class)
+public final class OrganizedCompaniesEnvironment implements Environment {
 
 	@Override
 	public void run() {

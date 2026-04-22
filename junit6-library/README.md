@@ -13,16 +13,24 @@ Java 17 · JUnit 6 · H2 · raw JDBC. No Spring, no ORM, nothing else.
 - **JUnit Platform TestEngine.** Tests run with plain `@Test` annotations; the Simulatest engine is auto-discovered via `ServiceLoader`.
 - **Plugin bootstrap.** `LibraryPlugin` configures H2 and creates the schema before the tree starts running.
 
-## Environment tree
+## Environment tree — a sequence of world-states
+
+Each node is a complete state of the library at a moment in its life — not a
+dump of one database table. Names describe what the world looks like at that
+state, not what rows got inserted.
 
 ```
-ReferenceDataEnvironment       genres, member types
-  └── BranchesEnvironment      3 branches
-        ├── CatalogEnvironment    books + book copies
-        │     └── MembersEnvironment   members
-        │           └── LoansEnvironment   active loans
-        └── StaffEnvironment      staff per branch
+ReferenceDataEnvironment          chartered: genres & tiers defined, nothing physical yet
+  └── OpenLibraryEnvironment      doors open: 3 branches exist at real addresses
+        ├── StockedLibraryEnvironment     shelves full: 10 books, 18 copies across branches
+        │     └── LendingLibraryEnvironment    ready to lend: 8 members enrolled, no loans yet
+        │           └── ActiveCirculationEnvironment    5 loans out (1 overdue), 2 holds queued
+        └── StaffedLibraryEnvironment     staffed building: 7 employees on duty, no stock
 ```
+
+Sibling world-states (stocked vs. staffed) are independent next-states of an
+open library: a library can be stocked without staff or staffed without stock.
+The Insistence Layer rolls back each sibling subtree before the next one runs.
 
 ## Run
 
@@ -40,6 +48,6 @@ mvn verify
 |---|---|
 | [`LibraryPlugin.java`](src/test/java/org/simulatest/example/library/LibraryPlugin.java) | How to bootstrap a `DataSource` into the Insistence Layer. |
 | [`ReferenceDataEnvironment.java`](src/main/java/org/simulatest/example/library/environment/ReferenceDataEnvironment.java) | A root environment. |
-| [`CatalogEnvironment.java`](src/main/java/org/simulatest/example/library/environment/CatalogEnvironment.java) | An environment that trusts its parent. |
+| [`StockedLibraryEnvironment.java`](src/main/java/org/simulatest/example/library/environment/StockedLibraryEnvironment.java) | An environment that trusts its parent. |
 | [`LoanTest.java`](src/test/java/org/simulatest/example/library/LoanTest.java) | How a test picks the environment it needs via `@UseEnvironment`. |
 | [`META-INF/services/...SimulatestPlugin`](src/test/resources/META-INF/services/org.simulatest.environment.plugin.SimulatestPlugin) | The `ServiceLoader` hook that registers the plugin. |

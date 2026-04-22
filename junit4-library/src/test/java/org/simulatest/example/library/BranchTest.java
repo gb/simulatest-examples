@@ -4,21 +4,23 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.environment.junit.EnvironmentJUnitRunner;
-import org.simulatest.example.library.environment.BranchesEnvironment;
+import org.simulatest.example.library.environment.OpenLibraryEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests at LEVEL 2 — reference data + 3 branches.
+ * Tests at the <b>open library</b> world-state — reference data + 3 branches,
+ * nothing else.
  *
- * <p>Branches are the pivot point of the tree: CatalogEnvironment and
- * StaffEnvironment are both children of BranchesEnvironment. If branch data
- * leaks between tests here, every downstream environment inherits corrupt state.
+ * <p>This state is the pivot point of the tree: it splits into
+ * {@code StockedLibraryEnvironment} (books arrive) and
+ * {@code StaffedLibraryEnvironment} (people hired). If branch data leaks
+ * between tests here, every downstream world-state inherits corrupt state.
  */
 @RunWith(EnvironmentJUnitRunner.class)
-@UseEnvironment(BranchesEnvironment.class)
+@UseEnvironment(OpenLibraryEnvironment.class)
 public class BranchTest {
 
 	@Test

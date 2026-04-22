@@ -2,19 +2,20 @@ package org.simulatest.example.library;
 
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.library.environment.BranchesEnvironment;
+import org.simulatest.example.library.environment.OpenLibraryEnvironment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests at LEVEL 2 — reference data + 3 branches.
+ * Tests at the <b>open library</b> world-state — reference data + 3 branches,
+ * nothing else.
  *
- * <p>Branches are the pivot point of the tree: CatalogEnvironment and
- * StaffEnvironment are both children of BranchesEnvironment. If branch
- * data leaks between tests here, every downstream environment inherits
- * corrupt state.
+ * <p>This state is the pivot point of the tree: it splits into
+ * {@code StockedLibraryEnvironment} (books arrive) and
+ * {@code StaffedLibraryEnvironment} (people hired). If branch data leaks
+ * between tests here, every downstream world-state inherits corrupt state.
  */
-@UseEnvironment(BranchesEnvironment.class)
+@UseEnvironment(OpenLibraryEnvironment.class)
 class BranchTest {
 
 	// =========================================================================

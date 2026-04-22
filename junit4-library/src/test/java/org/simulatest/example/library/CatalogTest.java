@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.environment.junit.EnvironmentJUnitRunner;
-import org.simulatest.example.library.environment.CatalogEnvironment;
+import org.simulatest.example.library.environment.StockedLibraryEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,10 +12,11 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests at LEVEL 3a — reference data + branches + 10 books + 18 copies.
+ * Tests at the <b>stocked library</b> world-state — 10 books and 18 copies
+ * on the shelves across 3 branches, no members or staff yet.
  */
 @RunWith(EnvironmentJUnitRunner.class)
-@UseEnvironment(CatalogEnvironment.class)
+@UseEnvironment(StockedLibraryEnvironment.class)
 public class CatalogTest {
 
 	@Test
@@ -146,7 +147,7 @@ public class CatalogTest {
 
 	@Test
 	public void noStaffExist() {
-		// Sibling StaffEnvironment's data is invisible here.
+		// Sibling StaffedLibraryEnvironment's data is invisible here.
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM staff"));
 	}
 

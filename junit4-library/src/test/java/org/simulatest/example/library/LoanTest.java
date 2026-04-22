@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.environment.junit.EnvironmentJUnitRunner;
-import org.simulatest.example.library.environment.LoansEnvironment;
+import org.simulatest.example.library.environment.ActiveCirculationEnvironment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,11 +13,11 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests at LEVEL 5 (leaf) — everything exists: 5 active loans, 2 holds,
- * the full library.
+ * Tests at the <b>active circulation</b> world-state (leaf) — 5 active
+ * loans (one overdue), 2 holds queued, the full library operational.
  */
 @RunWith(EnvironmentJUnitRunner.class)
-@UseEnvironment(LoansEnvironment.class)
+@UseEnvironment(ActiveCirculationEnvironment.class)
 public class LoanTest {
 
 	@Test

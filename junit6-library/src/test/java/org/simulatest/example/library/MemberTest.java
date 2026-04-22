@@ -4,18 +4,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.library.environment.MembersEnvironment;
+import org.simulatest.example.library.environment.LendingLibraryEnvironment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests at LEVEL 4 — full catalog + 8 members. Loans don't exist yet.
+ * Tests at the <b>lending library</b> world-state — full catalog plus 8
+ * enrolled members, poised to lend but no loan issued yet.
  *
  * <p>Members are the most FK-entangled entity: they reference member_type
- * AND branch, and are themselves referenced by loan and hold.
- * This level is where constraint enforcement tests really matter.
+ * AND branch, and are themselves referenced by loan and hold. This state
+ * is where constraint enforcement tests really matter.
  */
-@UseEnvironment(MembersEnvironment.class)
+@UseEnvironment(LendingLibraryEnvironment.class)
 class MemberTest {
 
 	// =========================================================================

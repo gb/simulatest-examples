@@ -5,13 +5,19 @@ import org.simulatest.environment.Environment;
 import org.simulatest.example.library.LibraryDatabase;
 
 /**
- * Level 4 — Library Members.
+ * World-state: <b>the library is ready to lend</b>.
  *
- * <p>Parent: {@link CatalogEnvironment} (books and copies).
- * Child: {@link LoansEnvironment} (loans and holds — not yet visible here).
+ * <p>Eight members are enrolled across all three tiers (Regular, Premium,
+ * Children) and spread across the three branches. The shelves are stocked
+ * and people hold cards — but no book has been checked out yet. This is
+ * the quiet moment on opening morning, five minutes before the first
+ * patron walks up to the desk.
+ *
+ * <p>Parent: {@link StockedLibraryEnvironment} (books exist to be lent).
+ * Child: {@link ActiveCirculationEnvironment} (circulation begins).
  */
-@EnvironmentParent(CatalogEnvironment.class)
-public final class MembersEnvironment implements Environment {
+@EnvironmentParent(StockedLibraryEnvironment.class)
+public final class LendingLibraryEnvironment implements Environment {
 
 	@Override
 	public void run() {

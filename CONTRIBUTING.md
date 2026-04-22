@@ -97,7 +97,8 @@ If a demo needs something no existing demo uses (e.g. MyBatis), prefer pinning i
 
 ## Style
 
-- Comments explain *why*, not *what*. A file called `CatalogEnvironment.java` doesn't need a comment saying `// catalog environment`.
+- **Name environments for world-states, not database tables.** `StockedLibraryEnvironment`, `FundedBankEnvironment`, `OnSaleEnvironment` — each one describes a cohesive state of the system, not a bag of rows for one entity. If your tree reads `UserEnvironment → OrderEnvironment → PaymentEnvironment`, step back: the system probably has fewer distinct useful states than it has tables. See `junit6-library` for a tree where every level is a state a real library moves through.
+- Comments explain *why*, not *what*. A file called `StockedLibraryEnvironment.java` doesn't need a comment saying `// stocks the library`.
 - Prefer fewer moving parts over a complete showcase. A good demo looks embarrassingly short.
 
 ## Bumping the Simulatest version

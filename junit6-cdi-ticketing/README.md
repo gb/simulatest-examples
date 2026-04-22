@@ -12,13 +12,18 @@ Java 17 · JUnit 6 · Jakarta CDI 4.1 · Weld SE 5 · H2 · raw JDBC.
 - **Synchronous CDI events.** `PurchaseService` fires a `PurchaseEvent` after inserting the purchase row; `InventoryObserver.onPurchase(@Observes PurchaseEvent)` reacts on the same thread and same connection. No transactional boilerplate — the Insistence Layer wraps everything.
 - **Side effects participate in the savepoint.** The purchase row, the inventory decrement, and the inventory-log row are three writes triggered by one method call, involving two classes. `PurchaseTest` moves seats around; `inventoryIsBackToFullBetweenTests` proves every seat is back in stock afterward.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-VenuesEnvironment                   2 venues (Austin, San Francisco)
-  └── ConferencesEnvironment        3 conferences
-        └── TicketTiersEnvironment  STANDARD (100) + VIP (20) per conference
+BookableVenuesEnvironment              venues exist but nothing scheduled
+  └── ScheduledConferencesEnvironment  3 conferences booked into venues
+        └── OnSaleEnvironment          tiers published, tickets purchasable
 ```
+
+Each node is a state a real ticket shop moves through: empty venues on the
+roster, dates committed to the calendar, then price sheets published and
+the box office open. `PurchaseTest` enters at the bottom because buying
+tickets only makes sense once the world is on sale.
 
 ## Run
 

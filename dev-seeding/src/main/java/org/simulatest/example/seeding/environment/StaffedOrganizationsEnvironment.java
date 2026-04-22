@@ -4,8 +4,19 @@ import org.simulatest.environment.Environment;
 import org.simulatest.environment.annotation.EnvironmentParent;
 import org.simulatest.example.seeding.DevDatabase;
 
-@EnvironmentParent(DepartmentEnvironment.class)
-public final class EmployeeEnvironment implements Environment {
+/**
+ * World-state: <b>the organizations are fully staffed</b>.
+ *
+ * <p>Ten employees fill the four departments at realistic ratios: Platform
+ * gets three engineers, Sales has a director and an AE, Operations runs
+ * with three people, Finance closes the books with two. This is the
+ * snapshot a developer wants when opening the app locally: a populated
+ * world where every screen has something to render.
+ *
+ * <p>Parent: {@link OrganizedCompaniesEnvironment}. Leaf of the tree.
+ */
+@EnvironmentParent(OrganizedCompaniesEnvironment.class)
+public final class StaffedOrganizationsEnvironment implements Environment {
 
 	@Override
 	public void run() {

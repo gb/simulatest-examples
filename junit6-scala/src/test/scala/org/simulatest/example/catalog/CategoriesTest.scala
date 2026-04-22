@@ -2,9 +2,9 @@ package org.simulatest.example.catalog
 
 import org.junit.jupiter.api.{Assertions, Test}
 import org.simulatest.environment.annotation.UseEnvironment
-import org.simulatest.example.catalog.environment.CategoriesEnvironment
+import org.simulatest.example.catalog.environment.OpenCatalogEnvironment
 
-@UseEnvironment(classOf[CategoriesEnvironment])
+@UseEnvironment(classOf[OpenCatalogEnvironment])
 class CategoriesTest:
 
 	@Test def threeCategoriesExist(): Unit =

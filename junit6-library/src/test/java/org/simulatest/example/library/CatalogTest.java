@@ -2,19 +2,20 @@ package org.simulatest.example.library;
 
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.library.environment.CatalogEnvironment;
+import org.simulatest.example.library.environment.StockedLibraryEnvironment;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests at LEVEL 3a — reference data + branches + 10 books + 18 copies.
+ * Tests at the <b>stocked library</b> world-state — 10 books and 18 copies
+ * on the shelves across 3 branches, but no members and no staff yet.
  *
- * <p>The catalog level is where data complexity jumps: two tables (book and
- * book_copy) with FK relationships between them and to parent tables (genre,
- * branch). This is the first level where cascading FK violations become
- * testable, and where bulk operations affect subsets of rows.
+ * <p>This is where data complexity jumps: two tables (book and book_copy)
+ * with FK relationships between them and to parent tables (genre, branch).
+ * The first state where cascading FK violations become testable, and where
+ * bulk operations affect subsets of rows.
  */
-@UseEnvironment(CatalogEnvironment.class)
+@UseEnvironment(StockedLibraryEnvironment.class)
 class CatalogTest {
 
 	// =========================================================================
@@ -241,7 +242,7 @@ class CatalogTest {
 
 	@Test
 	void noStaffExist() {
-		// StaffEnvironment is a sibling of CatalogEnvironment — its data
+		// StaffedLibraryEnvironment is a sibling world-state — its data
 		// is invisible here, proving sibling isolation at this level.
 		assertEquals(0, LibraryDatabase.queryInt("SELECT COUNT(*) FROM staff"));
 	}

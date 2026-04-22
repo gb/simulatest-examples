@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
 import org.simulatest.example.library.LibraryDatabase;
-import org.simulatest.example.library.environment.BranchesEnvironment;
-import org.simulatest.example.library.environment.CatalogEnvironment;
-import org.simulatest.example.library.environment.LoansEnvironment;
+import org.simulatest.example.library.environment.ActiveCirculationEnvironment;
+import org.simulatest.example.library.environment.OpenLibraryEnvironment;
 import org.simulatest.example.library.environment.ReferenceDataEnvironment;
-import org.simulatest.example.library.environment.StaffEnvironment;
+import org.simulatest.example.library.environment.StaffedLibraryEnvironment;
+import org.simulatest.example.library.environment.StockedLibraryEnvironment;
 
 class RemoteInsistenceLayerExampleTest {
 
@@ -45,8 +45,8 @@ class RemoteInsistenceLayerExampleTest {
 	}
 
 	@Nested
-	@UseEnvironment(BranchesEnvironment.class)
-	class AtBranchesLevel {
+	@UseEnvironment(OpenLibraryEnvironment.class)
+	class AtOpenLibraryLevel {
 
 		@Test
 		void branchesAndParentDataVisible() {
@@ -62,8 +62,8 @@ class RemoteInsistenceLayerExampleTest {
 	}
 
 	@Nested
-	@UseEnvironment(CatalogEnvironment.class)
-	class AtCatalogLevel {
+	@UseEnvironment(StockedLibraryEnvironment.class)
+	class AtStockedLibraryLevel {
 
 		@Test
 		void catalogDataVisible() {
@@ -95,8 +95,8 @@ class RemoteInsistenceLayerExampleTest {
 	}
 
 	@Nested
-	@UseEnvironment(StaffEnvironment.class)
-	class AtStaffLevel {
+	@UseEnvironment(StaffedLibraryEnvironment.class)
+	class AtStaffedLibraryLevel {
 
 		@Test
 		void staffDataVisible() {
@@ -119,8 +119,8 @@ class RemoteInsistenceLayerExampleTest {
 	}
 
 	@Nested
-	@UseEnvironment(LoansEnvironment.class)
-	class AtLoansLevel {
+	@UseEnvironment(ActiveCirculationEnvironment.class)
+	class AtActiveCirculationLevel {
 
 		@Test
 		void loansAndHoldsVisible() {

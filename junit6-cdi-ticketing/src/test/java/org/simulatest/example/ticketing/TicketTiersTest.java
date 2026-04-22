@@ -4,12 +4,12 @@ import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.simulatest.environment.annotation.UseEnvironment;
-import org.simulatest.example.ticketing.environment.TicketTiersEnvironment;
+import org.simulatest.example.ticketing.environment.OnSaleEnvironment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Dependent
-@UseEnvironment(TicketTiersEnvironment.class)
+@UseEnvironment(OnSaleEnvironment.class)
 class TicketTiersTest {
 
 	@Inject TicketTierRepository tiers;

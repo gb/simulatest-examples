@@ -4,20 +4,26 @@ import org.simulatest.environment.Environment;
 import org.simulatest.example.library.LibraryDatabase;
 
 /**
- * The Community Library — Environment Tree:
+ * The Community Library — Environment Tree, read as a sequence of world-states:
  *
  * <pre>
- *   ReferenceDataEnvironment  ◄── ROOT
- *     └── BranchesEnvironment
- *           ├── CatalogEnvironment
- *           │     └── MembersEnvironment
- *           │           └── LoansEnvironment
- *           └── StaffEnvironment
+ *   ReferenceDataEnvironment        ◄── ROOT (the library is chartered)
+ *     └── OpenLibraryEnvironment               (branches exist, doors open)
+ *           ├── StockedLibraryEnvironment      (books on the shelves)
+ *           │     └── LendingLibraryEnvironment    (members enrolled, ready to lend)
+ *           │           └── ActiveCirculationEnvironment  (loans out, holds queued)
+ *           └── StaffedLibraryEnvironment       (a staffed building, no stock yet)
  * </pre>
  *
- * Root environment. Inserts reference data — genres and membership tiers —
- * the foundation every other environment builds upon. An environment trusts
- * its parent the same way a class trusts its superclass.
+ * <p>World-state: <b>the library is chartered</b>. Genres and membership
+ * tiers are defined — the rules of operation the rest of the domain will
+ * plug into. Nothing exists physically yet: no branches, no books, no people.
+ *
+ * <p>An environment trusts its parent the way a class trusts its superclass;
+ * every child is a strictly richer world-state than its ancestors. Siblings
+ * ({@link StockedLibraryEnvironment} and {@link StaffedLibraryEnvironment})
+ * represent independent next-states, and the Insistence Layer rolls back one
+ * sibling's subtree before the other runs.
  *
  * <p>Schema is created by {@link LibraryDatabase#createSchema()} BEFORE the
  * tree runs, because DDL causes implicit commits that invalidate savepoints.

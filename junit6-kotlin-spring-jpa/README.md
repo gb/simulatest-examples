@@ -13,11 +13,11 @@ Kotlin 2.3 · Spring 7 · Spring Data JPA 4 · Hibernate ORM 7 · JUnit 6 · H2.
 - **A two-level tree with JPA state inheritance.** `TaskListDayTwoEnvironment` extends `TaskListEnvironment` and mutates rows the parent created. Both day-one and day-two tests see the parent data, day-two tests also see the mutations, and siblings of day-two would not.
 - **The `simulatest-di-spring` plugin.** It bridges Spring's `ApplicationContext` into the environment instantiation path.
 
-## Environment tree
+## Environment tree — a sequence of world-states
 
 ```
-TaskListEnvironment              10 fresh tasks, none done
-  └── TaskListDayTwoEnvironment  marks 5 of them done
+TaskListEnvironment              day one: 10 fresh tasks, nothing done yet
+  └── TaskListDayTwoEnvironment  day two: 5 tasks checked off, 5 still pending
 ```
 
 ## Run
