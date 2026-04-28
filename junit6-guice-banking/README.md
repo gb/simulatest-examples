@@ -11,7 +11,7 @@ Java 17 · JUnit 6 · Guice 7 · H2 · raw JDBC.
 - **Guice DI inside environments and tests.** `FundedBankEnvironment` takes a `BankingDatabase` and an `AccountRepository` by constructor injection; tests inject `TransferService`, `AccountRepository`, and `AuditLog`. Nothing exotic, just standard Guice.
 - **The audit-log invariant.** Every transfer writes a matched pair of audit rows: a negative entry on the source and a positive entry on the destination. The sum of `audit_log.amount_cents` over all rows is always zero. No triggers, no stored procedures; the guarantee is the `TransferService` code plus the savepoint wrap.
 - **Rollback covers side effects.** `TransferTest.manyTransfersKeepTheLedgerFlat` posts three transfers and writes six audit rows; `allBalancesAreBackToAThousand` and `auditLogIsEmptyAgainBetweenTests` run afterward and see the baseline. That's the demo's shiny moment.
-- **Order-independent plugin wiring.** `BankingPlugin` configures the Insistence Layer up front; `BankingModule` binds nothing related to the `DataSource`. Services reach the wrapped connection via `BankingDatabase`, which means `SimulatestGuicePlugin` and `BankingPlugin` can load in either order without fighting.
+- **Order-independent SPI wiring.** `BankingDatabaseSetup` returns the H2 `DataSource` and creates the schema; `BankingModule` binds nothing related to the `DataSource`. Services reach the wrapped connection via `BankingDatabase`, which means `SimulatestGuicePlugin` and the database-setup bootstrap can load in either order without fighting.
 
 ## Environment tree — a sequence of world-states
 
@@ -42,7 +42,7 @@ mvn verify
 |---|---|
 | [`TransferService.java`](src/main/java/org/simulatest/example/banking/TransferService.java) | The four writes (debit, credit, audit×2) that all ride the same savepoint. |
 | [`AuditLog.java`](src/main/java/org/simulatest/example/banking/AuditLog.java) | Tiny repository; shows the ledger invariant as a couple of SUM queries. |
-| [`BankingPlugin.java`](src/test/java/org/simulatest/example/banking/BankingPlugin.java) | Bootstraps H2, wraps it with the Insistence Layer, installs the schema. |
+| [`BankingDatabaseSetup.java`](src/test/java/org/simulatest/example/banking/BankingDatabaseSetup.java) | Hands the H2 `DataSource` to Simulatest via the `SimulatestDatabaseSetup` SPI; installs the schema in `setupSchema(...)`. |
 | [`TransferTest.java`](src/test/java/org/simulatest/example/banking/TransferTest.java) | The rollback-covers-the-audit-log story. The two isolation tests at the bottom are the payoff. |
 | [`BankingModule.java`](src/test/java/org/simulatest/example/banking/BankingModule.java) | Explicitly empty. Why it must stay that way is in its class comment. |
 

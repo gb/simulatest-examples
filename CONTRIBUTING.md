@@ -35,7 +35,7 @@ your-demo/
     <parent>
         <groupId>org.simulatest.examples</groupId>
         <artifactId>simulatest-examples</artifactId>
-        <version>0.1.0</version>
+        <version>0.2.0</version>
     </parent>
 
     <artifactId>your-demo</artifactId>

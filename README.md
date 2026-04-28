@@ -40,7 +40,7 @@ Each folder is a self-contained project with its own `README.md` explaining what
 |---|---|---|
 | [`dev-seeding`](dev-seeding) | Java, H2 file, no test framework | The same Environment classes reused from a plain `main()`. Two modes: seed a local dev DB (data persists) or run a "what-if" experiment (data undone via an Insistence Layer level). |
 
-> More planned: plain Hibernate, MyBatis, jOOQ, parallel execution, custom plugin. Quarkus Panache needs a core `simulatest-di-quarkus` plugin first (classloader isolation makes a demo-only hack misleading). See [CONTRIBUTING.md](CONTRIBUTING.md) if you want to add one.
+> More planned: plain Hibernate, MyBatis, jOOQ, parallel execution, custom plugin. See [CONTRIBUTING.md](CONTRIBUTING.md) if you want to add one.
 
 ## Build
 
@@ -66,7 +66,7 @@ All demos track the same Simulatest version, set by the `simulatest.version` pro
 
 ```xml
 <properties>
-    <simulatest.version>0.1.0</simulatest.version>
+    <simulatest.version>0.2.0</simulatest.version>
 </properties>
 ```
 

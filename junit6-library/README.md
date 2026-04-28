@@ -11,7 +11,7 @@ Java 17 · JUnit 6 · H2 · raw JDBC. No Spring, no ORM, nothing else.
 - **Environment tree.** Parent-child setup composed via `@EnvironmentParent`. Reference data is inserted once and every subtree trusts it exists.
 - **Insistence Layer isolation.** Sibling environments never see each other's data; every test starts clean via `resetCurrentLevel()`. No `@After`, no `TRUNCATE`.
 - **JUnit Platform TestEngine.** Tests run with plain `@Test` annotations; the Simulatest engine is auto-discovered via `ServiceLoader`.
-- **Plugin bootstrap.** `LibraryPlugin` configures H2 and creates the schema before the tree starts running.
+- **SPI bootstrap.** `LibraryDatabaseSetup` implements `SimulatestDatabaseSetup`: returns the H2 `DataSource` from `dataSource()` and creates the schema in `setupSchema(...)` before the tree starts running.
 
 ## Environment tree — a sequence of world-states
 
@@ -46,8 +46,8 @@ mvn verify
 
 | File | What to read it for |
 |---|---|
-| [`LibraryPlugin.java`](src/test/java/org/simulatest/example/library/LibraryPlugin.java) | How to bootstrap a `DataSource` into the Insistence Layer. |
+| [`LibraryDatabaseSetup.java`](src/test/java/org/simulatest/example/library/LibraryDatabaseSetup.java) | How to bootstrap a `DataSource` into the Insistence Layer via the `SimulatestDatabaseSetup` SPI. |
 | [`ReferenceDataEnvironment.java`](src/main/java/org/simulatest/example/library/environment/ReferenceDataEnvironment.java) | A root environment. |
 | [`StockedLibraryEnvironment.java`](src/main/java/org/simulatest/example/library/environment/StockedLibraryEnvironment.java) | An environment that trusts its parent. |
 | [`LoanTest.java`](src/test/java/org/simulatest/example/library/LoanTest.java) | How a test picks the environment it needs via `@UseEnvironment`. |
-| [`META-INF/services/...SimulatestPlugin`](src/test/resources/META-INF/services/org.simulatest.environment.plugin.SimulatestPlugin) | The `ServiceLoader` hook that registers the plugin. |
+| [`META-INF/services/...SimulatestDatabaseSetup`](src/test/resources/META-INF/services/org.simulatest.environment.bootstrap.SimulatestDatabaseSetup) | The `ServiceLoader` hook that registers the setup. |

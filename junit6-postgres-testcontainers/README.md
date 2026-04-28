@@ -15,29 +15,29 @@ H2 is generous about a lot of things PostgreSQL enforces strictly: transaction i
 - **Savepoints on real Postgres.** Every `increaseLevel()` maps to a `SAVEPOINT`, every `decreaseLevel()` to a `ROLLBACK TO SAVEPOINT`. The library's 100+ assertions ride entirely on that being correct.
 - **FK-constraint survival.** Unlike H2, Postgres aborts the whole transaction on any SQL error ("current transaction is aborted, commands ignored"). `LibraryDatabase.execute` pushes a nested savepoint per statement so a constraint violation only rolls back that one statement, not the enclosing Insistence Layer savepoint. The `deletingBranchWithCopiesFails`-style tests prove the outer savepoint survives.
 - **Delete-and-reinsert with the same PK.** Postgres enforces PK uniqueness at statement level; the savepoint restores the original row at rollback. Tricky on any DB, nailed here.
-- **Testcontainers wiring.** `LibraryPlugin` spins up a container with `withReuse(true)` so local runs after the first are near-instant. Schema is created once, before any savepoint.
+- **Testcontainers wiring.** `LibraryDatabaseSetup` spins up a container with `withReuse(true)` so local runs after the first are near-instant. Schema is created once, before any savepoint.
 
 ## Where is the container?
 
-Not in the tests — and that's deliberate. Test classes like [`LoanTest`](src/test/java/org/simulatest/example/library/LoanTest.java) contain nothing but domain assertions. No `@Container`, no `@Testcontainers`, no datasource plumbing.
+Not in the tests, and that's deliberate. Test classes like [`LoanTest`](src/test/java/org/simulatest/example/library/LoanTest.java) contain nothing but domain assertions. No `@Container`, no `@Testcontainers`, no datasource plumbing.
 
-The container lives in a single place: [`LibraryPlugin.java`](src/test/java/org/simulatest/example/library/LibraryPlugin.java).
+The container lives in a single place: [`LibraryDatabaseSetup.java`](src/test/java/org/simulatest/example/library/LibraryDatabaseSetup.java).
 
 ```
 src/test/
 ├── java/org/simulatest/example/library/
-│   ├── LibraryPlugin.java        ← PostgreSQLContainer lives here
-│   └── *Test.java                ← pure domain tests, unaware of Docker
+│   ├── LibraryDatabaseSetup.java   ← PostgreSQLContainer lives here
+│   └── *Test.java                  ← pure domain tests, unaware of Docker
 └── resources/META-INF/services/
-    └── org.simulatest.environment.plugin.SimulatestPlugin   ← registers the plugin
+    └── org.simulatest.environment.bootstrap.SimulatestDatabaseSetup   ← registers the setup
 ```
 
 How it gets picked up:
 
 1. The Simulatest JUnit Platform TestEngine boots at suite start.
-2. It calls `ServiceLoader.load(SimulatestPlugin.class)`, which reads [`META-INF/services/org.simulatest.environment.plugin.SimulatestPlugin`](src/test/resources/META-INF/services/org.simulatest.environment.plugin.SimulatestPlugin) and finds `LibraryPlugin`.
-3. `LibraryPlugin`'s static initializer fires `POSTGRES.start()` — one container per JVM, shared across every test class.
-4. `initialize(...)` builds a `PGSimpleDataSource` from the container's dynamic JDBC URL, hands it to `InsistenceLayerFactory`, and creates the schema once — *before* any savepoint is pushed.
+2. It calls `ServiceLoader.load(SimulatestDatabaseSetup.class)`, which reads [`META-INF/services/org.simulatest.environment.bootstrap.SimulatestDatabaseSetup`](src/test/resources/META-INF/services/org.simulatest.environment.bootstrap.SimulatestDatabaseSetup) and finds `LibraryDatabaseSetup`.
+3. `LibraryDatabaseSetup`'s static initializer fires `POSTGRES.start()`: one container per JVM, shared across every test class.
+4. `dataSource()` returns a `PGSimpleDataSource` built from the container's dynamic JDBC URL; Simulatest wraps it with the Insistence Layer, then calls `setupSchema(wrappedDataSource)`, which creates the schema once, *before* any savepoint is pushed.
 
 The upshot: swapping the engine (H2 → Postgres, Postgres → MySQL, …) is a one-file change. Tests never know.
 
@@ -68,7 +68,7 @@ First run pulls `postgres:16.4-alpine` (~80 MB). Subsequent runs with reuse enab
 
 Only two things change vs. the H2 version:
 
-1. **`LibraryPlugin`** — swap the in-memory H2 `DataSource` for a Testcontainers-managed `PGSimpleDataSource`. That's the whole wiring difference.
+1. **`LibraryDatabaseSetup`**: swap the in-memory H2 `DataSource` for a Testcontainers-managed `PGSimpleDataSource`. That's the whole wiring difference.
 2. **Date arithmetic** — H2 uses `DATEADD('DAY', N, CURRENT_DATE)`; Postgres uses `CURRENT_DATE + N`. One find-and-replace across `ActiveCirculationEnvironment` and `LoanTest`.
 
 Schema DDL, all environments, and all other tests are byte-for-byte identical to the H2 demo.
@@ -77,6 +77,6 @@ Schema DDL, all environments, and all other tests are byte-for-byte identical to
 
 | File | What to read it for |
 |---|---|
-| [`LibraryPlugin.java`](src/test/java/org/simulatest/example/library/LibraryPlugin.java) | Testcontainers wiring: container, datasource, schema. |
+| [`LibraryDatabaseSetup.java`](src/test/java/org/simulatest/example/library/LibraryDatabaseSetup.java) | Testcontainers wiring: container, datasource, schema. |
 | [`ActiveCirculationEnvironment.java`](src/main/java/org/simulatest/example/library/environment/ActiveCirculationEnvironment.java) | The one environment whose SQL had to change for Postgres. |
 | [`LoanTest.java`](src/test/java/org/simulatest/example/library/LoanTest.java) | Full-tree savepoint tests running on a real engine. |

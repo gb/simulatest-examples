@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.List;
+import javax.sql.DataSource;
 import org.simulatest.insistencelayer.InsistenceLayerFactory;
 
 /**
@@ -85,13 +86,18 @@ public final class LibraryDatabase {
 	}
 
 	/**
-	 * Creates the database schema. Must be called BEFORE the environment
-	 * tree runs — DDL causes implicit commits that invalidate savepoints.
+	 * Creates the database schema on the given (already Insistence-Layer-wrapped)
+	 * DataSource. Called by {@link LibraryDatabaseSetup#setupSchema(DataSource)}
+	 * before any savepoint exists, since DDL causes implicit commits that
+	 * would invalidate the savepoint stack.
 	 */
-	public static void createSchema() {
-		withStatement("Failed to create library schema", stmt -> {
+	public static void createSchema(DataSource dataSource) {
+		try (Connection conn = dataSource.getConnection();
+			 Statement stmt = conn.createStatement()) {
 			for (String ddl : SCHEMA_DDL) stmt.execute(ddl);
-		});
+		} catch (SQLException e) {
+			throw new LibraryDatabaseException("Failed to create library schema", e);
+		}
 	}
 
 	public static void execute(String sql) {

@@ -8,7 +8,7 @@ Java 17 · JUnit 4.13.2 · H2 · raw JDBC.
 
 ## What it shows
 
-- **`@RunWith(EnvironmentJUnitRunner.class)`** — the JUnit 4 hook. Everything else (environments, `@UseEnvironment`, the Insistence Layer, the plugin) is identical to the JUnit 6 demo.
+- **`@RunWith(EnvironmentJUnitRunner.class)`** — the JUnit 4 hook. Everything else (environments, `@UseEnvironment`, the Insistence Layer, the database setup) is identical to the JUnit 6 demo.
 - **Same isolation guarantees.** Sibling environments are invisible; per-test rollback is automatic.
 - **One real API difference worth knowing.** `@RunWith(Parameterized.class)` can't coexist with the Simulatest runner, so tables of inputs are written as separate methods sharing a helper. See `MemberTest.duplicateEmailIsRejected` and its siblings.
 
@@ -52,6 +52,6 @@ mvn verify
 
 | File | What to read it for |
 |---|---|
-| [`LibraryPlugin.java`](src/test/java/org/simulatest/example/library/LibraryPlugin.java) | Bootstraps H2 into the Insistence Layer — same as junit6-library. |
+| [`LibraryDatabaseSetup.java`](src/test/java/org/simulatest/example/library/LibraryDatabaseSetup.java) | Bootstraps H2 into the Insistence Layer via the `SimulatestDatabaseSetup` SPI; same as junit6-library. |
 | [`StaffTest.java`](src/test/java/org/simulatest/example/library/StaffTest.java) | Crown jewel: sibling isolation. Its `@RunWith` is the whole diff. |
 | [`MemberTest.duplicateEmailIsRejected`](src/test/java/org/simulatest/example/library/MemberTest.java) | How to replace a `@ParameterizedTest` when the class-level runner is already taken. |

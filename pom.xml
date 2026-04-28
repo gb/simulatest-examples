@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.simulatest.examples</groupId>
 	<artifactId>simulatest-examples</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<packaging>pom</packaging>
 	<name>Simulatest Examples</name>
 	<description>Didactic examples showcasing Simulatest's environment tree and Insistence Layer. Consumes Simulatest from Maven Central.</description>
@@ -23,7 +23,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- Simulatest release consumed from Maven Central. Bump when a new
 		     release is available and you want the examples to track it. -->
-		<simulatest.version>0.1.0</simulatest.version>
+		<simulatest.version>0.2.0</simulatest.version>
 		<h2.version>2.4.240</h2.version>
 		<!-- JUnit 6 unified Jupiter and Platform onto a single version number. -->
 		<junit6.version>6.0.3</junit6.version>

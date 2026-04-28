@@ -42,7 +42,7 @@ mvn verify
 | [`PurchaseService.java`](src/main/java/org/simulatest/example/ticketing/PurchaseService.java) | Writes a purchase row, fires a `PurchaseEvent`. |
 | [`InventoryObserver.java`](src/main/java/org/simulatest/example/ticketing/InventoryObserver.java) | Observes the event and does two follow-up writes. Synchronous, so it rides the savepoint. |
 | [`PurchaseTest.java`](src/test/java/org/simulatest/example/ticketing/PurchaseTest.java) | Purchases + the two isolation tests at the bottom that prove observer writes also roll back. |
-| [`TicketingPlugin.java`](src/test/java/org/simulatest/example/ticketing/TicketingPlugin.java) | Installs schema and configures the Insistence Layer. Runs alongside `SimulatestJakartaPlugin`; order-independent. |
+| [`TicketingDatabaseSetup.java`](src/test/java/org/simulatest/example/ticketing/TicketingDatabaseSetup.java) | Hands the H2 `DataSource` to Simulatest via the `SimulatestDatabaseSetup` SPI; installs the schema in `setupSchema(...)`. Runs alongside `SimulatestJakartaPlugin`; order-independent. |
 | [`META-INF/beans.xml`](src/main/resources/META-INF/beans.xml) | CDI discovery descriptor. `annotated` mode means only annotated classes become beans. |
 
 ## Why `TicketingDatabase` instead of `@Inject DataSource`

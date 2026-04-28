@@ -43,7 +43,7 @@ This is a sharp edge; the same category of issue can bite any Scala library that
 | File | What to read it for |
 |---|---|
 | [`CatalogDb.scala`](src/main/scala/org/simulatest/example/catalog/CatalogDb.scala) | ScalikeJDBC wrappers. See the class comment for why `DB.autoCommit` is used. |
-| [`CatalogPlugin.scala`](src/test/scala/org/simulatest/example/catalog/CatalogPlugin.scala) | Bootstraps H2, wraps via the Insistence Layer, registers the wrapped DataSource with ScalikeJDBC's connection pool. |
+| [`CatalogDatabaseSetup.scala`](src/test/scala/org/simulatest/example/catalog/CatalogDatabaseSetup.scala) | Hands H2 to Simulatest via the `SimulatestDatabaseSetup` SPI; in `setupSchema(...)` it installs DDL and registers the wrapped `DataSource` with ScalikeJDBC's connection pool. |
 | [`StockedCatalogEnvironment.scala`](src/main/scala/org/simulatest/example/catalog/environment/StockedCatalogEnvironment.scala) | The parent-annotation in Scala syntax. |
 | [`ProductsTest.scala`](src/test/scala/org/simulatest/example/catalog/ProductsTest.scala) | Classic Simulatest isolation story told in Scala. |
 
